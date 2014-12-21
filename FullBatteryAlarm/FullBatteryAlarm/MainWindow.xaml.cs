@@ -24,6 +24,8 @@ namespace FullBatteryAlarm
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly int _interval = 5 * 1000;// in milliseconds
+
         System.Windows.Forms.NotifyIcon _notifyIcon;
         System.Windows.Forms.Timer _timer = new System.Windows.Forms.Timer();
 
@@ -40,10 +42,12 @@ namespace FullBatteryAlarm
             _notifyIcon.DoubleClick += SetWindowStateToNormal;
             _notifyIcon.MouseDown += NotifyIcon_MouseDown;
 
-            _timer.Interval = 5 * 1000;
-            _timer.Tick += CheckBatteryLevel;
+            _timer.Interval = _interval;
+            _timer.Tick += _timer_Tick;
 
             _timer.Start();
+
+            this.WindowState = System.Windows.WindowState.Minimized;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -51,6 +55,8 @@ namespace FullBatteryAlarm
             var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
             this.Left = desktopWorkingArea.Right - this.Width;
             this.Top = desktopWorkingArea.Bottom - this.Height;
+
+            CheckBatteryLevel();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -60,15 +66,22 @@ namespace FullBatteryAlarm
             this.WindowState = System.Windows.WindowState.Minimized;
         }
 
-        private void CheckBatteryLevel(object sender, EventArgs e)
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            CheckBatteryLevel();
+        }
+
+        private void CheckBatteryLevel()
         {
             PowerStatus pw = SystemInformation.PowerStatus;
 
             v_TextBlock_State.Text = string.Format("{0} - {1}", pw.PowerLineStatus, (pw.BatteryChargeStatus != 0) ? pw.BatteryChargeStatus.ToString() : "Not charging");
 
+            var batteryLifePercent = (pw.BatteryLifePercent * 100).ToString();
+
             if (pw.PowerLineStatus == System.Windows.Forms.PowerLineStatus.Online)
             {
-                v_TextBlock_TimeRemaining.Text = "Online";
+                v_TextBlock_TimeRemaining.Text = string.Format("Online  ({0} %)", batteryLifePercent);
 
                 if (pw.BatteryLifePercent >= 1 && !_notified)
                 {
@@ -85,11 +98,11 @@ namespace FullBatteryAlarm
                 {
                     var timeRemaining = TimeSpan.FromSeconds(pw.BatteryLifeRemaining);
 
-                    v_TextBlock_TimeRemaining.Text = string.Format("{0} h {1} min", timeRemaining.Hours, timeRemaining.Minutes);
+                    v_TextBlock_TimeRemaining.Text = string.Format("{0} h {1} min  ({2} %)", timeRemaining.Hours, timeRemaining.Minutes, batteryLifePercent);
                 }
                 else
                 {
-                    v_TextBlock_TimeRemaining.Text = "Calculating...";
+                    v_TextBlock_TimeRemaining.Text = string.Format("Calculating...  ({0} %)", batteryLifePercent);
                 }
             }
         }
@@ -115,7 +128,7 @@ namespace FullBatteryAlarm
             base.OnStateChanged(e);
         }
 
-        void NotifyIcon_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void NotifyIcon_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
