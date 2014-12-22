@@ -26,8 +26,18 @@ namespace FullBatteryAlarm
     {
         private static readonly int _interval = 5 * 1000;// in milliseconds
 
+        private static readonly string _iconBattery_100 = "Icons/100_percent-50.ico";
+        private static readonly string _iconBattery_90 = "Icons/90_percent-50.ico";
+        private static readonly string _iconBattery_75 = "Icons/75_percent-50.ico";
+        private static readonly string _iconBattery_50 = "Icons/50_percent-50.ico";
+        private static readonly string _iconBattery_25 = "Icons/25_percent-50.ico";
+        private static readonly string _iconBattery_10 = "Icons/10_percent-50.ico";
+        private static readonly string _iconBattery_0 = "Icons/0_percent-50.ico";
+
+
         System.Windows.Forms.NotifyIcon _notifyIcon;
         System.Windows.Forms.Timer _timer = new System.Windows.Forms.Timer();
+
 
         private bool _notified = false;
 
@@ -36,7 +46,7 @@ namespace FullBatteryAlarm
             InitializeComponent();
 
             _notifyIcon = new System.Windows.Forms.NotifyIcon();
-            _notifyIcon.Icon = new System.Drawing.Icon("Icons/Main.ico");
+            _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_100);
             _notifyIcon.Visible = true;
             _notifyIcon.Click += SetWindowStateToNormal;
             _notifyIcon.DoubleClick += SetWindowStateToNormal;
@@ -79,6 +89,8 @@ namespace FullBatteryAlarm
 
             var batteryLifePercent = (pw.BatteryLifePercent * 100).ToString();
 
+            SetNotifyIcon(pw.BatteryLifePercent);
+
             if (pw.PowerLineStatus == System.Windows.Forms.PowerLineStatus.Online)
             {
                 v_TextBlock_TimeRemaining.Text = string.Format("Online  ({0} %)", batteryLifePercent);
@@ -120,6 +132,38 @@ namespace FullBatteryAlarm
             {
                 this.Show();
                 this.WindowState = WindowState.Normal;
+            }
+        }
+
+        private void SetNotifyIcon(float batteryLifePercent)
+        {
+            if (batteryLifePercent >= 1)
+            {
+                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_100);
+            }
+            else if (batteryLifePercent >= 0.90)
+            {
+                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_90);
+            }
+            else if (batteryLifePercent >= 0.75)
+            {
+                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_75);
+            }
+            else if (batteryLifePercent >= 0.50)
+            {
+                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_50);
+            }
+            else if (batteryLifePercent >= 0.25)
+            {
+                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_25);
+            }
+            else if (batteryLifePercent >= 0.10)
+            {
+                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_10);
+            }
+            else
+            {
+                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_0);
             }
         }
 
