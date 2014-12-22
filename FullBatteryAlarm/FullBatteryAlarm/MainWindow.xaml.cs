@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Management;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,13 +27,13 @@ namespace FullBatteryAlarm
     {
         private static readonly int _interval = 5 * 1000;// in milliseconds
 
-        private static readonly string _iconBattery_100 = "Icons/100_percent-50.ico";
-        private static readonly string _iconBattery_90 = "Icons/90_percent-50.ico";
-        private static readonly string _iconBattery_75 = "Icons/75_percent-50.ico";
-        private static readonly string _iconBattery_50 = "Icons/50_percent-50.ico";
-        private static readonly string _iconBattery_25 = "Icons/25_percent-50.ico";
-        private static readonly string _iconBattery_10 = "Icons/10_percent-50.ico";
-        private static readonly string _iconBattery_0 = "Icons/0_percent-50.ico";
+        private static readonly string _batteryIcon_100 = "FullBatteryAlarm.Icons.100_percent-50.ico";
+        private static readonly string _batteryIcon_90 = "FullBatteryAlarm.Icons.90_percent-50.ico";
+        private static readonly string _batteryIcon_75 = "FullBatteryAlarm.Icons.75_percent-50.ico";
+        private static readonly string _batteryIcon_50 = "FullBatteryAlarm.Icons.50_percent-50.ico";
+        private static readonly string _batteryIcon_25 = "FullBatteryAlarm.Icons.25_percent-50.ico";
+        private static readonly string _batteryIcon_10 = "FullBatteryAlarm.Icons.10_percent-50.ico";
+        private static readonly string _batteryIcon_0 = "FullBatteryAlarm.Icons.0_percent-50.ico";
 
 
         System.Windows.Forms.NotifyIcon _notifyIcon;
@@ -46,7 +47,7 @@ namespace FullBatteryAlarm
             InitializeComponent();
 
             _notifyIcon = new System.Windows.Forms.NotifyIcon();
-            _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_100);
+            _notifyIcon.Icon = GetIconFromResource(_batteryIcon_100);
             _notifyIcon.Visible = true;
             _notifyIcon.Click += SetWindowStateToNormal;
             _notifyIcon.DoubleClick += SetWindowStateToNormal;
@@ -139,32 +140,37 @@ namespace FullBatteryAlarm
         {
             if (batteryLifePercent >= 1)
             {
-                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_100);
+                _notifyIcon.Icon = GetIconFromResource(_batteryIcon_100);
             }
             else if (batteryLifePercent >= 0.90)
             {
-                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_90);
+                _notifyIcon.Icon = GetIconFromResource(_batteryIcon_90);
             }
             else if (batteryLifePercent >= 0.75)
             {
-                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_75);
+                _notifyIcon.Icon = GetIconFromResource(_batteryIcon_75);
             }
             else if (batteryLifePercent >= 0.50)
             {
-                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_50);
+                _notifyIcon.Icon = GetIconFromResource(_batteryIcon_50);
             }
             else if (batteryLifePercent >= 0.25)
             {
-                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_25);
+                _notifyIcon.Icon = GetIconFromResource(_batteryIcon_25);
             }
             else if (batteryLifePercent >= 0.10)
             {
-                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_10);
+                _notifyIcon.Icon = GetIconFromResource(_batteryIcon_10);
             }
             else
             {
-                _notifyIcon.Icon = new System.Drawing.Icon(_iconBattery_0);
+                _notifyIcon.Icon = GetIconFromResource(_batteryIcon_0);
             }
+        }
+
+        private Icon GetIconFromResource(string resourceName)
+        {
+            return new System.Drawing.Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName));
         }
 
         protected override void OnStateChanged(EventArgs e)
