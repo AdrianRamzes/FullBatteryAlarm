@@ -85,9 +85,9 @@ namespace FullBatteryAlarm
 
                 if (pw.BatteryLifePercent >= 1 && !_notified)
                 {
-                    System.Windows.MessageBox.Show("Battery is Full!");
-
                     _notified = true;
+
+                    System.Windows.MessageBox.Show("Battery is Full!");
                 }
             }
             else
@@ -103,8 +103,11 @@ namespace FullBatteryAlarm
                 else
                 {
                     v_TextBlock_TimeRemaining.Text = string.Format("Calculating...  ({0} %)", batteryLifePercent);
+
                 }
             }
+
+            _notifyIcon.Text = v_TextBlock_TimeRemaining.Text;
         }
 
         private void SetWindowStateToNormal(object sender, EventArgs e)
