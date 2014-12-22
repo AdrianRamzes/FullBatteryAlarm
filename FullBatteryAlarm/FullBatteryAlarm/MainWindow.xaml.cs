@@ -36,7 +36,7 @@ namespace FullBatteryAlarm
             InitializeComponent();
 
             _notifyIcon = new System.Windows.Forms.NotifyIcon();
-            _notifyIcon.Icon = new System.Drawing.Icon("Main.ico");
+            _notifyIcon.Icon = new System.Drawing.Icon("Icons/Main.ico");
             _notifyIcon.Visible = true;
             _notifyIcon.Click += SetWindowStateToNormal;
             _notifyIcon.DoubleClick += SetWindowStateToNormal;
