@@ -75,7 +75,7 @@ namespace FullBatteryAlarm
         {
             PowerStatus pw = SystemInformation.PowerStatus;
 
-            v_TextBlock_State.Text = string.Format("{0} - {1}", pw.PowerLineStatus, (pw.BatteryChargeStatus != 0) ? pw.BatteryChargeStatus.ToString() : "Not charging");
+            v_TextBlock_Status.Text = string.Format("{0} - {1}", pw.PowerLineStatus, (pw.BatteryChargeStatus != 0) ? pw.BatteryChargeStatus.ToString() : "Not charging");
 
             var batteryLifePercent = (pw.BatteryLifePercent * 100).ToString();
 

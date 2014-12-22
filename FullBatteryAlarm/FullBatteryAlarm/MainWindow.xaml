@@ -22,10 +22,10 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         
-        <Label Grid.Column="0" Grid.Row="0" Content="State: " VerticalAlignment="Center"/>
+        <Label Grid.Column="0" Grid.Row="0" Content="Status: " VerticalAlignment="Center"/>
         <Label Grid.Column="0" Grid.Row="1" Content="Time Remaining:" VerticalAlignment="Center"/>
 
-        <TextBlock Name="v_TextBlock_State" Grid.Column="1" Grid.Row="0" Text="NaN" VerticalAlignment="Center"/>
+        <TextBlock Name="v_TextBlock_Status" Grid.Column="1" Grid.Row="0" Text="NaN" VerticalAlignment="Center"/>
         <TextBlock Name="v_TextBlock_TimeRemaining" Grid.Column="1" Grid.Row="1" Text="Nan" VerticalAlignment="Center"/>
     </Grid>
 </Window>
