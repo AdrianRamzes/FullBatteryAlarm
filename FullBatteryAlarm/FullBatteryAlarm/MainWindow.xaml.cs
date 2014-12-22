@@ -86,7 +86,7 @@ namespace FullBatteryAlarm
                 if (pw.BatteryLifePercent >= 1 && !_notified)
                 {
                     _notified = true;
-
+                    System.Media.SystemSounds.Beep.Play();
                     System.Windows.MessageBox.Show("Battery is Full!");
                 }
             }
